@@ -1,0 +1,4 @@
+[IB]
+IBHost = 127.0.0.1
+IBPort = 7496
+IBClientId = 1
