@@ -1,5 +1,5 @@
 """
-Bot actions
+IBC actions
 """
 import datetime
 import logging

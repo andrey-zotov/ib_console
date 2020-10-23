@@ -60,16 +60,16 @@ def __run_monitor(svc: bot.Service) -> bool:
 
     def on_press(key):
         global g_do_exit
-        if hasattr(key, 'char') and key.char in ['q', 'Q']:
+        if key in ['q', 'Q']:
             g_do_exit = True
             Console.print("Terminating...")
             # Stop listener
             return False
+        return True
 
-    from pynput.keyboard import Listener
-    # Collect events until released
-    listener = Listener(on_press=on_press)
-    listener.start()
+    from ibc.key_reader import KeyAsyncReader
+    key_reader = KeyAsyncReader()
+    key_reader.startReading(on_press)
 
     Console.print_dashboard(svc)
 

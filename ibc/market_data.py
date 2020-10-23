@@ -42,12 +42,10 @@ class Query:
         self.ib_bars: ib.BarDataList = []
 
     def __extract_bar_average(self, ib_bar: BarData) -> float:
-        average = ib_bar.average
-        if not average:
-            if ib_bar.close:
-                average = (ib_bar.open + ib_bar.close) / 2.
-            else:
-                average = ib_bar.open
+        if ib_bar.close:
+            average = (ib_bar.open + ib_bar.close) / 2.
+        else:
+            average = ib_bar.open
         return average * (100. if self.contract and self.contract.secType == 'OPT' else 1.)
 
     def get_values(self) -> List[float]:

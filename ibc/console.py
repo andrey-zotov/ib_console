@@ -1,5 +1,5 @@
 """
-Bot cli console operations
+IBC cli console operations
 """
 
 import logging
