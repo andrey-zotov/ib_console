@@ -99,6 +99,7 @@ class IBAppMock:
         class Price:
             def __init__(self, _open):
                 self.open = _open
+                self.close = _open
                 self.average = _open
                 self.date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         return [Price(self.mock_price)]
