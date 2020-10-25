@@ -3,6 +3,8 @@ cli interface to the trading ibc
 """
 
 import logging
+import signal
+import os
 from argparse import ArgumentParser
 from datetime import (
     datetime, timedelta
@@ -67,15 +69,29 @@ def __run_monitor(svc: bot.Service) -> bool:
             return False
         return True
 
-    from ibc.key_reader import KeyAsyncReader
-    key_reader = KeyAsyncReader()
-    key_reader.startReading(on_press)
+    if os.name == 'nt':
+        from ibc.key_reader import KeyAsyncReader
+        key_reader = KeyAsyncReader()
+        key_reader.startReading(on_press)
+
+    def signal_handler(signalnum, stackframe):
+        global g_do_exit
+        Console.print("Received signal " + str(signalnum) + ", terminating...")
+        g_do_exit = True
+
+    signal.signal(signal.SIGTERM, signal_handler)
+    signal.signal(signal.SIGINT, signal_handler)
+    if os.name == 'nt':
+        signal.signal(signal.SIGBREAK, signal_handler)
+    else:
+        signal.signal(signal.SIGQUIT, signal_handler)
+
 
     Console.print_dashboard(svc)
 
     while True:
 
-        Console.print('Waiting for updates - Press Q to exit...')
+        Console.print('Waiting for updates - Press Q or Ctrl-C to exit...')
 
         time_last_updated = datetime.now()
         while True:
